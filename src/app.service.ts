@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 
 import data, { ReportType } from "./data";
 
+import { v4 as uuid } from "uuid";
+
 interface ReportData {
   amount: number, source: string
 }
@@ -18,7 +20,7 @@ export class AppService {
 
   createReport(reportType: ReportType, { amount, source }: ReportData) {
     const newReport = {
-      id: "asdfasfasdfasdf",
+      id: uuid(),
       amount,
       source,
       created_at: new Date(),
