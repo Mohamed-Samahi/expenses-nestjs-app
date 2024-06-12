@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, HttpCode, ParseUUIDPip
 
 import { ReportType } from "./data";
 import { AppService } from "./app.service";
+import { CreateReportDto } from "./dtos/report.dto";
 
 @Controller('report/:reportType')
 export class AppController {
@@ -27,10 +28,7 @@ export class AppController {
   @Post()
   createReport(
     @Param('reportType', new ParseEnumPipe(ReportType)) reportType: ReportType,
-    @Body() body: {
-      amount: number,
-      source: string,
-    }
+    @Body() body: CreateReportDto
   ) {
     if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return false;
 
