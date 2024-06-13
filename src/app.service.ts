@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import data, { ReportType } from "./data";
 
 import { v4 as uuid } from "uuid";
+import { ReportResponseDto } from "./dtos/report.dto";
 
 interface ReportData {
   amount: number,
@@ -16,15 +17,19 @@ interface UpdateReportData {
 
 @Injectable()
 export class AppService {
-  getAllReports(reportType: ReportType) {
-    return data.report.filter(report => report.type === reportType);
+  getAllReports(reportType: ReportType): ReportResponseDto[] {
+    return data.report.filter(report => {
+      if (report.type === reportType) {
+        return new ReportResponseDto(report);
+      }
+    });
   }
 
-  getReportById(reportType: ReportType, id: string) {
-    return data.report.filter(report => report.id === id && report.type === reportType);
+  getReportById(reportType: ReportType, id: string): ReportResponseDto {
+    return new ReportResponseDto(data.report.find(report => report.id === id && report.type === reportType));
   }
 
-  createReport(reportType: ReportType, { amount, source }: ReportData) {
+  createReport(reportType: ReportType, { amount, source }: ReportData): ReportResponseDto {
     const newReport = {
       id: uuid(),
       amount,
@@ -35,17 +40,14 @@ export class AppService {
     }
 
     data.report.push(newReport);
-    return {
-      success: "Added Successfully",
-      newReport
-    }
+    return new ReportResponseDto(newReport);
   }
 
-  updateReport(ReportData: ReportType, id: string, body: UpdateReportData) {
+  updateReport(ReportData: ReportType, id: string, body: UpdateReportData): ReportResponseDto {
     let reportToUpdate = data.report
       .find(report => report.id === id);
 
-    if (!reportToUpdate) return false;
+    if (!reportToUpdate) return;
 
     const reportIndex = data.report.findIndex(report => report.id === reportToUpdate.id);
 
@@ -55,7 +57,7 @@ export class AppService {
       updated_at: new Date(),
     }
 
-    return data.report[reportIndex];
+    return new ReportResponseDto(data.report[reportIndex]);
   }
 
   deleteReport(id: string) {

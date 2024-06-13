@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, HttpCode, ParseUUIDPip
 
 import { ReportType } from "./data";
 import { AppService } from "./app.service";
-import { CreateReportDto } from "./dtos/report.dto";
+import { CreateReportDto, ReportResponseDto, UpdateReportDto } from "./dtos/report.dto";
 
 @Controller('report/:reportType')
 export class AppController {
@@ -10,8 +10,8 @@ export class AppController {
   constructor(private readonly appService: AppService) { }
 
   @Get()
-  getAllReports(@Param('reportType', new ParseEnumPipe(ReportType)) reportType: ReportType) {
-    if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return false;
+  getAllReports(@Param('reportType', new ParseEnumPipe(ReportType)) reportType: ReportType): ReportResponseDto[] {
+    if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return [];
     return this.appService.getAllReports(reportType);
   }
 
@@ -19,8 +19,8 @@ export class AppController {
   getReportById(
     @Param('reportType', new ParseEnumPipe(ReportType)) reportType: ReportType,
     @Param('id', ParseUUIDPipe) id: string,
-  ) {
-    if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return false;
+  ): ReportResponseDto {
+    if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return;
 
     return this.appService.getReportById(reportType, id);
   }
@@ -29,8 +29,8 @@ export class AppController {
   createReport(
     @Param('reportType', new ParseEnumPipe(ReportType)) reportType: ReportType,
     @Body() body: CreateReportDto
-  ) {
-    if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return false;
+  ): ReportResponseDto {
+    if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return;
 
     return this.appService.createReport(reportType, body);
   }
@@ -39,12 +39,9 @@ export class AppController {
   updateReport(
     @Param('reportType', new ParseEnumPipe(ReportType)) reportType: ReportType,
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: {
-      amount: number,
-      source: string,
-    }
-  ) {
-    if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return false;
+    @Body() body: UpdateReportDto
+  ): ReportResponseDto {
+    if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return;
 
     return this.appService.updateReport(reportType, id, body);
   }
