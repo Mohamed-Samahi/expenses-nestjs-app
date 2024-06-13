@@ -5,7 +5,13 @@ import data, { ReportType } from "./data";
 import { v4 as uuid } from "uuid";
 
 interface ReportData {
-  amount: number, source: string
+  amount: number,
+  source: string
+}
+
+interface UpdateReportData {
+  amount?: number,
+  source?: string
 }
 
 @Injectable()
@@ -35,7 +41,7 @@ export class AppService {
     }
   }
 
-  updateReport(ReportData: ReportType, id: string, body: ReportData) {
+  updateReport(ReportData: ReportType, id: string, body: UpdateReportData) {
     let reportToUpdate = data.report
       .find(report => report.id === id);
 
