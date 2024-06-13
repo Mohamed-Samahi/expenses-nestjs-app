@@ -30,7 +30,7 @@ export class ReportResponseDto {
     amount: number;
 
     @Expose({ name: "createdAt" })
-    transformCreatedAt() {
+    transformCreatedAt?() {
         return this.created_at
     }
 
