@@ -11,7 +11,7 @@ export class ReportController {
 
     @Get()
     getAllReports(@Param('reportType', new ParseEnumPipe(ReportType)) reportType: ReportType): ReportResponseDto[] {
-        if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return [];
+        if (reportType != ReportType.EXPENSE && reportType != ReportType.INCOME) return [];
         return this.reportService.getAllReports(reportType);
     }
 
@@ -20,7 +20,7 @@ export class ReportController {
         @Param('reportType', new ParseEnumPipe(ReportType)) reportType: ReportType,
         @Param('id', ParseUUIDPipe) id: string,
     ): ReportResponseDto {
-        if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return;
+        if (reportType != ReportType.EXPENSE && reportType != ReportType.INCOME) return;
 
         return this.reportService.getReportById(reportType, id);
     }
@@ -30,7 +30,7 @@ export class ReportController {
         @Param('reportType', new ParseEnumPipe(ReportType)) reportType: ReportType,
         @Body() body: CreateReportDto
     ): ReportResponseDto {
-        if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return;
+        if (reportType != ReportType.EXPENSE && reportType != ReportType.INCOME) return;
 
         return this.reportService.createReport(reportType, body);
     }
@@ -41,7 +41,7 @@ export class ReportController {
         @Param('id', ParseUUIDPipe) id: string,
         @Body() body: UpdateReportDto
     ): ReportResponseDto {
-        if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return;
+        if (reportType != ReportType.EXPENSE && reportType != ReportType.INCOME) return;
 
         return this.reportService.updateReport(reportType, id, body);
     }
@@ -52,7 +52,7 @@ export class ReportController {
         @Param('reportType', new ParseEnumPipe(ReportType)) reportType: ReportType,
         @Param('id', ParseUUIDPipe) id: string,
     ) {
-        if (reportType != ReportType.EXPENCE && reportType != ReportType.INCOME) return false;
+        if (reportType != ReportType.EXPENSE && reportType != ReportType.INCOME) return false;
 
         return this.reportService.deleteReport(id);
     }
