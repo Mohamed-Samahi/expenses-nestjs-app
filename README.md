@@ -1,73 +1,81 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJS Course Notes
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Overview
+The Course is Introduced by [Laith Academy](https://www.youtube.com/@laithacademy) on Youtube.
+The Link to the [Course Video](https://www.youtube.com/watch?v=BiN-xzNkH_0&t=138s)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Class-Based Structure
 
-## Description
+- **Class-Based Components**: Most components in NestJS, such as controllers, services, and modules, are defined as classes.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Controllers
 
-## Installation
+- **Definition**: Controllers handle incoming requests and return responses. They define and create endpoints.
+    - **Separation of Concerns**: Controllers should delegate business logic to services and focus on request and response logic only.
 
-```bash
-$ npm install
-```
+### Services
 
-## Running the app
+- **Business Logic**: Services encapsulate the business logic of the application.
+    - **Dependency Injection**:
+        - Define the service class with the `@Injectable` decorator.
+        - Add the exported class name to the `providers` array in the `@Module` decorator within the module file.
 
-```bash
-# development
-$ npm run start
+### Modules
 
-# watch mode
-$ npm run start:dev
+- **Dependency Management**: Modules organize the application structure and manage dependencies between components such as controllers and services.
 
-# production mode
-$ npm run start:prod
-```
+### Pipes
 
-## Test
+- **Functionality**: Pipes are used to transform and validate data.
+    - **Validation**: Primarily used for validation.
+        - **Built-in Validation Pipes**: Pipes like `ParseIntPipe` check for specific data types such as integers.
+        - **Data Type Pipes**: There are built-in pipes for various data types.
+    - **Enum Validation**: To validate an enum, instantiate the `ParseEnumPipe` and pass the defined enum.
 
-```bash
-# unit tests
-$ npm run test
+### Using Validation Pipe Middleware
 
-# e2e tests
-$ npm run test:e2e
+- **Global Pipe Middleware**: To use validation pipe middleware globally, access the `useGlobalPipes` method on the app instance in the main file and pass parameters to it.
+    - **Basic Setup**:
+    
+    ```tsx
+    async function bootstrap() {
+      const app = await NestFactory.create(AppModule);
+      app.useGlobalPipes(new ValidationPipe());
+      await app.listen(3000);
+    }
+    ```
+    
+    - **Whitelist Validation**: To remove all properties not defined in the DTO from the request body (for POST or PUT requests), set `whitelist: true` in the `ValidationPipe` options.
+    
+    ```tsx
+    async function bootstrap() {
+      const app = await NestFactory.create(AppModule);
+      app.useGlobalPipes(new ValidationPipe({
+        whitelist: true
+      }));
+      await app.listen(3000);
+    }
+    ```
+    
+    - **Forbid Non-Whitelisted Properties**: Optionally, throw an error for non-whitelisted properties by setting `forbidNonWhitelisted: true`.
+    
+    ```tsx
+    async function bootstrap() {
+      const app = await NestFactory.create(AppModule);
+      app.useGlobalPipes(new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true
+      }));
+      await app.listen(3000);
+    }
+    ```
 
-# test coverage
-$ npm run test:cov
-```
+### Data Transfer Objects (DTOs)
 
-## Support
+- **Purpose**: DTOs are used to validate and transform request data.
+    - **Transformation**: DTOs transform data into the required form.
+- **Validation**: Use the `class-validator` package, which provides various validators that can be used as decorators to validate DTO properties.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+These notes summarize the key concepts and best practices for building applications with NestJS. Use them as a reference guide to create well-structured and maintainable NestJS applications.
