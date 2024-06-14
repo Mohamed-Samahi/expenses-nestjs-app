@@ -78,4 +78,128 @@ The Link to the [Course Video](https://www.youtube.com/watch?v=BiN-xzNkH_0&t=138
 
 ---
 
+# Project: Expenses App
+We built an expenses app that provides reports for users based on their expenses and income. Users can add their expenses and income to track their financial activities.
+
+## Endpoints Routes
+
+### Get Expense or Income Report
+
+- URL: http://127.0.0.1:3000/report/:reportTypeEnum.
+- reportTypeEnum is "expense" || "income".
+- Method: GET.
+- Response:
+``` json
+
+[
+  {
+    "id": "string",
+    "source": "string",
+    "amount": 100,
+    "created_at": "2024-06-14T00:00:00.000Z",
+    "updated_at": "2024-06-14T00:00:00.000Z",
+    "type": "ReportTypeEnum"
+  }
+]
+```
+
+### Get Specific Expense or Income Report
+
+- URL: http://127.0.0.1:3000/report/:reportTypeEnum/:id.
+- reportTypeEnum is "expense" || "income".
+- Method: GET.
+- Response:
+``` json
+{
+  "id": "string",
+  "amount": 100,
+  "source": "string",
+  "created_at": "2024-06-14T00:00:00.000Z",
+  "updated_at": "2024-06-14T00:00:00.000Z",
+  "type": "ReportTypeEnum"
+}
+```
+
+### Add New Income or Expense
+
+- URL: http://127.0.0.1:3000/report/:reportTypeEnum.
+- Method: POST.
+- Request Body:
+``` json
+{
+  "amount": 100,
+  "source": "string"
+}
+```
+- Response:
+``` json
+{
+  "id": "string",
+  "amount": 100,
+  "source": "string",
+  "type": "ReportTypeEnum"
+  "createdAt": "2024-06-14T00:00:00.000Z",
+}
+```
+
+### Update Income or Expense
+
+URL: http://127.0.0.1:3000/report/:reportTypeEnum/:id
+- Method: PUT.
+- Request Body:
+```json
+{
+  "amount": 200,
+  "source": "string"
+}
+```
+
+- Response:
+```json
+{
+  "id": "string",
+  "source": "string",
+  "amount": 200,
+  "created_at": "2024-06-14T00:00:00.000Z",
+  "updated_at": "2024-06-14T00:00:00.000Z",
+  "type": "ReportTypeEnum"
+}
+```
+
+### Delete Income or Expense
+
+- URL: http://127.0.0.1:3000/report/:reportTypeEnum/:id
+- Method: DELETE.
+
+### Get Expenses Summary
+
+- URL: http://127.0.0.1:3000/summary
+- Method: GET
+- Response:
+```json
+{
+  "totalIncome": 500,
+  "totalExpense": 300,
+  "netIncome": 200
+}
+```
+
+## Running the Project
+# To run the project:
+
+Clone the repository.
+- Move to the root directory of the project.
+- Run npm install to install dependencies.
+``` bash
+    npm install
+```
+        
+- Run the application.
+
+```bash
+npm run start:dev
+```
+
+---
+
 These notes summarize the key concepts and best practices for building applications with NestJS. Use them as a reference guide to create well-structured and maintainable NestJS applications.
